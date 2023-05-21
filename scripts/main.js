@@ -21,10 +21,10 @@ function setUserName() {
     myHeading.textContent = `Guitar is cool, ${myName}`;
 }
 
-if (!localStorage.getItem("name")) {
+const storedName = localStorage.getItem("name")
+if (!storedName) {
     setUserName();
 } else {
-    const storedName = localStorage.getItem("name");
     myHeading.textContent = `Guitar is cool, ${storedName}`;
 }
 
