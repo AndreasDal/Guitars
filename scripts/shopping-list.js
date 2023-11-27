@@ -1,52 +1,66 @@
-const list  = document.querySelector("ul");
-const input = document.querySelector("input");
-const btn   = document.querySelector("button");
+const list   = document.querySelector("ul");
+const input  = document.querySelector("input");
+const btnAdd = document.querySelector("#additem");
+const btnRes = document.querySelector("#reset");
 
 input.focus();
 
-btn.addEventListener('click', addItem);
+btnAdd.addEventListener('click', addItem);
+btnRes.addEventListener('click', deleteAllItems);
 
-// function addItem () {
-//     const listValue = input.value;
-//     input.value = '';
-//     const listItem = document.createElement("li");
-//     const span =     document.createElement("span");
-//     const btn2 =     document.createElement("button");
-//     listItem.appendChild(span);
-//     listItem.appendChild(btn2);
-//     span.textContent = listValue;
-//     btn2.textContent = "Delete";
-//     list.appendChild(listItem);
-//     btn2.addEventListener('click', () => listItem.parentElement.removeChild(listItem));
-//     input.focus();
-// }
+if (localStorage.length > 0) {
+    loadItems();
+}
 
-function addItemStorage () {
+function addStorage () {
     const listValue = input.value;
-    // input.value = '';
-    const newKey = localStorage.length + 1;
+    // const newKey = localStorage.length + 1;
     localStorage.setItem(listValue, listValue);
     console.log(listValue);
     return listValue;
 }
 
 function addItem () {
-    const listValue = addItemStorage();
+    const listValue = addStorage();
     input.value = '';
-    const listItem = document.createElement("li");
-    const span =     document.createElement("span");
-    const btn2 =     document.createElement("button");
-    listItem.appendChild(span);
-    listItem.appendChild(btn2);
-    span.textContent = listValue;
-    btn2.textContent = "Delete";
-    list.appendChild(listItem);
-    // btn2.addEventListener('click', () => listItem.parentElement.removeChild(listItem));
-    btn2.addEventListener('click', () => deleteItem(listValue ,listItem));
+    addElement(listValue);
     input.focus();
+}
+
+function addElement(listValue) {
+    const listItem = document.createElement("li");
+    const span = document.createElement("span");
+    const btn = document.createElement("button");
+    listItem.appendChild(span);
+    listItem.appendChild(btn);
+    span.textContent = listValue;
+    btn.textContent = "Delete";
+    list.appendChild(listItem);
+    btn.addEventListener('click', () => deleteItem(listValue ,listItem));
 }
 
 function deleteItem (value, item) {
     localStorage.removeItem(value);
     item.parentElement.removeChild(item);
 }
+
+function loadItems () {
+    for (item of Object.values(localStorage)) {
+        addElement(item);
+    }
+}
+
+function deleteAllItems () {
+    clearStorage();
+    while (list.children.length > 0) {
+        list.children[0].remove();
+    }
+}
+
+function clearStorage () {
+    localStorage.clear();
+}
+
+
+
+
